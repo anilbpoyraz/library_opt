@@ -25,6 +25,17 @@ async def create_book(
     return JSONResponse(content={'data': jsonable_encoder(data)})
 
 @router.get("", response_model=schemas.BookBase)
+async def get_all_books(
+    db: Session = Depends(deps.get_db),
+    page: int = 0,
+    limit: int = 25,
+    # current_user: models.Patron = Depends(deps.get_current_user),
+) -> Any:
+    """ Get all books """
+    all_books = controller.book.get_multi(db, offset=page, limit=25)
+
+    return JSONResponse(content={'data': jsonable_encoder(all_books)})
+
 async def read_book(
     book_id: str, 
     db: Session = Depends(deps.get_db)
@@ -34,6 +45,9 @@ async def read_book(
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
     return db_book
+
+@router.get("/all", response_model=schemas.BookBase)
+
 
 @router.patch("/update", response_model=schemas.BookBase)
 async def update_book(
@@ -52,7 +66,7 @@ async def update_book(
     
     return updated_book
 
-@router.delete("/books/{book_id}", response_model=schemas.BookBase)
+@router.delete("/delete", response_model=schemas.BookBase)
 async def delete_book(
     book_id: str, db: Session = Depends(deps.get_db)
 ) -> Any:

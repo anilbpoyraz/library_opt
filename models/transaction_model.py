@@ -9,6 +9,9 @@ import datetime
 
 
 class Transaction(Base):
+    """
+    Table that stores transaction informations which a patron barrow a book from library.
+    """
     __tablename__ = 'transactions'
     id = Column(UUID, primary_key=True, server_default=text("uuid_generate_v4()"))
     book_id = Column(UUID, ForeignKey('books.id'))

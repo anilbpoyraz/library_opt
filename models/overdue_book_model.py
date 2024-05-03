@@ -8,7 +8,7 @@ import json
 
 
 class OverdueBook(Base):
-    """ Model that overdue books """
+    """ Model that stores overdue books by patrons """
     __tablename__ = 'overdue_books'
     id = Column(UUID, primary_key=True, server_default=text("uuid_generate_v4()"))
     transaction_id = Column(UUID, ForeignKey('transactions.id'), unique=True)
